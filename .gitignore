@@ -1,0 +1,13 @@
+*.db
+flashcards.db
+
+venv/
+.env
+
+__pycache__/
+*.pyc , *.pyo , *.pyd
+*.sqlite3
+
+.vscode/
+
+Thumbs.db
