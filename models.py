@@ -3,7 +3,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 Base = declarative_base()
 
-class Flashcards(Base):
+class Flashcard(Base):
     __tablename__ = "Flashcards"
     id = Column(Integer , primary_key=True)
     user_id = Column(Integer)
