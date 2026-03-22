@@ -34,11 +34,13 @@ async def get_answer(update: Update, context: ContextTypes):
 
         session.add(new_card)
         session.commit()
-    await update.message.reply_text(f"question: {question}\nAnswer: {answer}\n")
-    return ConversationHandler.END
+
+    await update.message.reply_text("card saved! send another question or type /cancel to finish")
+    return QUESTION
     
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("successfully canceled!")
+    await update.message.reply_text("successfully canceled! use /add when you're ready again")
+    return ConversationHandler.END
     
 TEXT_ONLY = filters.TEXT & ~filters.COMMAND
 conv_handler = ConversationHandler(
