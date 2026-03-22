@@ -10,7 +10,7 @@ class Flashcard(Base):
     question = Column(String)
     answer = Column(String)
 
-engine = create_engine('sqlite://flashcards.db')
+engine = create_engine('sqlite:///flashcards.db')
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
