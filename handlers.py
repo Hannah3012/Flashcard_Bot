@@ -37,7 +37,22 @@ async def get_answer(update: Update, context: ContextTypes):
 
     await update.message.reply_text("card saved! send another question or type /cancel to finish")
     return QUESTION
+
+async def list(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    session = Session()
+    cards = session.query(Flashcard).filter_by(user_id = user_id).all()
+    session.close()
     
+    if not cards:
+        await update.message.reply_text("You have no cards yet!")
+        return
+    message = "<b>Your Flashcards: </b>\n\n"
+    for i, card in enumerate(cards, 1):
+        message += f"{i}: Question: {card.question}\n Answer: {card.answer}\n\n"
+
+    await update.message.reply_text(message, parse_mode="HTML")
+
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("successfully canceled! use /add when you're ready again")
     return ConversationHandler.END
