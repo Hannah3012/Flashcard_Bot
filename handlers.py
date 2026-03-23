@@ -89,11 +89,16 @@ async def check_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 TEXT_ONLY = filters.TEXT & ~filters.COMMAND
-conv_handler = ConversationHandler(
-    entry_points=[CommandHandler("add", add)],
+Flashcard_conv = ConversationHandler(
+    entry_points=[
+        CommandHandler("add", add),
+        CommandHandler('review', review)
+
+        ],
     states = {
         QUESTION: [MessageHandler(TEXT_ONLY, get_question)],
         ANSWER: [MessageHandler(TEXT_ONLY, get_answer)],
+        QUIZ_ANSWER: [MessageHandler(TEXT_ONLY, check_answer)]
     },
 
     fallbacks=[
