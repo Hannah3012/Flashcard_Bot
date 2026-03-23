@@ -5,6 +5,7 @@ from models import Flashcard, Session
 
 #states
 QUESTION, ANSWER = range(2)
+QUIZ_ANSWER = 2
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -56,7 +57,37 @@ async def list(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("successfully canceled! use /add when you're ready again")
     return ConversationHandler.END
+
+async def review(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    session = Session()
+    cards = session.query(Flashcard).filter_by(user_id = user_id).all()
+    session.close()
+
+    if not cards:
+        await update.message.reply_text("No cards found! use /add to create some")
+        return ConversationHandler.END
     
+    card = random.choice(cards)
+    context.user_data['current_card_id'] = card.id
+    context.user_data['correct_answer'] = card.answer
+
+    await update.message.reply_text(f"Question: {card.question}\n\nWhat is the Answer?")
+    return QUIZ_ANSWER
+
+async def check_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_answer = update.message.text.strip().lower()
+    correct_answer = context.user_data.get('correct_answer', "").strip().lower()
+
+    if user_answer == correct_answer:
+        await update.message.reply_text("correct! well done.")
+        return ConversationHandler.END
+    else:
+        actual = context.user_data.get('correct_answer')
+        await update.message.reply_text(f"Incorrect \n\n The correct answer was: {actual}")
+
+    return ConversationHandler.END
+
 TEXT_ONLY = filters.TEXT & ~filters.COMMAND
 conv_handler = ConversationHandler(
     entry_points=[CommandHandler("add", add)],
