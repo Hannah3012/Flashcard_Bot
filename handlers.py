@@ -88,6 +88,14 @@ async def check_answer(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     return ConversationHandler.END
 
+async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "<b>Flashcard Bot Help</b>\n\n"
+        "/add - Start creating a new card\n"
+        "/list - View all your saved cards\n"
+        "/review - Test yourself with a random card\n"
+        "/cancel - Stop the current action\n", parse_mode="HTML"
+    )
 TEXT_ONLY = filters.TEXT & ~filters.COMMAND
 Flashcard_conv = ConversationHandler(
     entry_points=[
