@@ -145,13 +145,15 @@ TEXT_ONLY = filters.TEXT & ~filters.COMMAND
 Flashcard_conv = ConversationHandler(
     entry_points=[
         CommandHandler("add", add),
-        CommandHandler('review', review)
+        CommandHandler('review', review),
+        CommandHandler('delete', list_to_delete )
 
         ],
     states = {
         QUESTION: [MessageHandler(TEXT_ONLY, get_question)],
         ANSWER: [MessageHandler(TEXT_ONLY, get_answer)],
-        QUIZ_ANSWER: [MessageHandler(TEXT_ONLY, check_answer)]
+        QUIZ_ANSWER: [MessageHandler(TEXT_ONLY, check_answer)],
+        CARD_TO_DELETE: [MessageHandler(TEXT_ONLY, delete)],
     },
 
     fallbacks=[
