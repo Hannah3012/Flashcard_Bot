@@ -94,7 +94,8 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "/add - Start creating a new card\n"
         "/list - View all your saved cards\n"
         "/review - Test yourself with a random card\n"
-        "/cancel - Stop the current action\n", parse_mode="HTML"
+        "/cancel - Stop the current action\n"
+        "/delete - select and remove a card\n", parse_mode="HTML"
     )
 
 async def list_to_delete(update: Update, context: ContextTypes):
