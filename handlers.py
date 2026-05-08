@@ -4,9 +4,7 @@ import random
 from models import Flashcard, Session
 
 #states
-QUESTION, ANSWER = range(2)
-QUIZ_ANSWER = 2
-CARD_TO_DELETE = 1
+QUESTION, ANSWER, QUIZ_ANSWER, CARD_TO_DELETE = range(4)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
@@ -142,18 +140,30 @@ async def delete(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return ConversationHandler.END
 
 TEXT_ONLY = filters.TEXT & ~filters.COMMAND
+
+Delete_conv = ConversationHandler(
+    entry_points=[
+        CommandHandler('delete', list_to_delete)
+    ],
+
+    states={
+        CARD_TO_DELETE: [MessageHandler(TEXT_ONLY, delete)],
+    },
+
+    fallbacks=[
+        CommandHandler('cancel', cancel)
+    ],
+)
 Flashcard_conv = ConversationHandler(
     entry_points=[
         CommandHandler("add", add),
         CommandHandler('review', review),
-        CommandHandler('delete', list_to_delete )
-
         ],
     states = {
         QUESTION: [MessageHandler(TEXT_ONLY, get_question)],
         ANSWER: [MessageHandler(TEXT_ONLY, get_answer)],
         QUIZ_ANSWER: [MessageHandler(TEXT_ONLY, check_answer)],
-        CARD_TO_DELETE: [MessageHandler(TEXT_ONLY, delete)],
+        
     },
 
     fallbacks=[

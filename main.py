@@ -1,7 +1,7 @@
 import logging
 from telegram.ext import Application, CommandHandler
 from config import BOT_TOKEN
-from handlers import start, list , Flashcard_conv, help
+from handlers import start, list , Flashcard_conv, help, Delete_conv
 
 logging.basicConfig(
     format= '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -17,6 +17,7 @@ def main():
     app.add_handler(CommandHandler("list", list))
     app.add_handler(CommandHandler('help', help))
     app.add_handler(Flashcard_conv)
+    app.add_handler(Delete_conv)
     app.run_polling()
 
 if __name__ == "__main__":
